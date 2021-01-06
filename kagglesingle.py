@@ -55,7 +55,7 @@ if __name__ == '__main__':
     test_url = kagglesingle()
     startStr = ""
     returnArr = [None] * 2
-    singleUrl = "https://www.kaggle.com/snsinha0305/higher-lb-score-by-tuning-mloss-around-6-811"
+    singleUrl = "https://www.kaggle.com/evelynjacinto/xgbooost-222"
     startCount = 0
     visitedArr = []
     print("test: " + str(test_url.testsingleurl(singleUrl, startCount, startStr, visitedArr, returnArr)))

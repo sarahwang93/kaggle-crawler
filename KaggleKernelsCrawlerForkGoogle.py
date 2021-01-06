@@ -4,11 +4,16 @@ import multiprocessing
 from multiprocessing import Pool, Process, Manager
 from datetime import datetime
 from kagglesingle import kagglesingle
-
-global_lock = threading.Lock()
+from google.cloud import storage
 
 #google client read from bucket
+client = storage.Client()
+bucket = client.get_bucket('kagglemetadata')
+input_blob = bucket.get_blob('second_test_set.csv')
+output_blob = bucket.get_blob('forkfromurl_test_2.txt')
 
+
+global_lock = threading.Lock()
 
 def read_write(inputurls, output, procenum):
     startPro = kagglesingle()
@@ -19,7 +24,6 @@ def read_write(inputurls, output, procenum):
     global_lock.acquire()
 
     with open(inputurls, 'r') as inputf, open(output, 'w') as outputf:
-        for line in inputf:
             temp = line.split(",")
             url = "https://www.kaggle.com/" + temp[0] + '/' + temp[1].replace('\n', '')
             try:
@@ -72,7 +76,7 @@ if __name__ == '__main__':
     print("Start at:", datetime.now())
     start = datetime.now()
     pool = Pool(8)
-    df_collection = pool.apply(read_write, args=("second_test_set.csv", "forkfromurl_test_2.txt", 0))
+    df_collection = pool.apply(read_write, args=(input_blob, output_blob, 0))
     pool.close()
     pool.join()
     print("End at:", datetime.now())
